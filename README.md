@@ -4,7 +4,7 @@ Learning Guide for .Net Core MVC
 # Models 
 
 ## Adding a new data model class 
-`Right-click the Models folder > Add > Class. Name the class MyModel.`
+Right-click the Models folder > Add > Class. Name the class MyModel.
 
 ```
 using System;
@@ -55,7 +55,66 @@ Visual Studio creates:
 The automatic creation of the database context and `CRUD` `(create, read, update, and delete)` action methods and views is known as scaffolding.
 
 ## Migrations 
+1. From the Tools menu, select NuGet Package Manager > Package Manager Console (PMC).
+2. In the PMC, enter the following commands:
+  - `Add-Migration Initial`
+  - `Update-Database`
 
+The `Add-Migration` command generates code to create the initial database schema.
+
+The database schema is based on the model specified in the `MvcMovieContext class` (in the Data/MvcMovieContext.cs file). The `Initial` argument is the migration name. Any name can be used, but by convention, a name that describes the migration is used. For more information, see Tutorial: Using the migrations feature - ASP.NET MVC with EF Core.
+
+The Update-Database command runs the Up method in the Migrations/{time-stamp}_InitialCreate.cs file, which creates the database.
+
+# Examine the Context registered with dependency injection 
+ASP.NET Core is built with dependency injection (DI). Services (such as the EF Core DB context) are registered with DI during application startup. Components that require these services (such as Razor Pages) are provided these services via constructor parameters. 
+
+The scaffolding tool automatically created a DB context and registered it with the DI container.
+Examine the following Startup.ConfigureServices method. The highlighted line was added by the scaffolder:
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.Configure<CookiePolicyOptions>(options =>
+    {
+        // This lambda determines whether user consent for non-essential cookies 
+        // is needed for a given request.
+        options.CheckConsentNeeded = context => true;
+        options.MinimumSameSitePolicy = SameSiteMode.None;
+    });
+
+
+    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+    services.AddDbContext<MvcMovieContext>(options =>
+--->     options.UseSqlServer(Configuration.GetConnectionString("MvcMovieContext")));
+}
+```
+
+The MvcMovieContext coordinates EF Core functionality (Create, Read, Update, Delete, etc.) for the Movie model. The data context (MvcMovieContext) is derived from Microsoft.EntityFrameworkCore.DbContext. The data context specifies which entities are included in the data model:
+
+```
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace MvcMovie.Models
+{
+    public class MvcMovieContext : DbContext
+    {
+        public MvcMovieContext (DbContextOptions<MvcMovieContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<MvcMovie.Models.Movie> Movie { get; set; }
+    }
+}
+```
+The preceding code creates a DbSet<Movie> property for the entity set. In Entity Framework terminology, an entity set typically corresponds to a database table. An entity corresponds to a row in the table.
+
+The name of the connection string is passed in to the context by calling a method on a DbContextOptions object. For local development, the ASP.NET Core configuration system reads the connection string from the appsettings.json file.
 
 
 # Views 
