@@ -5,6 +5,15 @@ Learning Guide for .Net Core MVC
 # Views 
 Views use Razor view files, which have embedded c# code within them. *You create a view template file using Razor. Razor-based view templates have a .cshtml file extension. They provide an elegant way to create HTML output with C#.*
 
+## Adding Views 
+- Right click on the Views folder, and then Add > New Folder and name the folder HelloWorld.
+- Right click on the Views/HelloWorld folder, and then Add > New Item.
+- In the Add New Item - MvcMovie dialog
+  - In the search box in the upper-right, enter view
+  - Select Razor View
+  - Keep the Name box value, Index.cshtml.
+  - Select Add
+
 ## Rendering from controllers 
 ```
 public IActionResult Index()
