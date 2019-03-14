@@ -1,10 +1,23 @@
 # .Net-core
 Learning Guide for .Net Core MVC
 
+
+# Views 
+Views use Razor view files, which have embedded c# code within them. *You create a view template file using Razor. Razor-based view templates have a .cshtml file extension. They provide an elegant way to create HTML output with C#.*
+
+## Rendering from controllers 
+```
+public IActionResult Index()
+{
+    return View();
+}
+```
+The preceding code calls the controller's View method. It uses a view template to generate an HTML response. Controller methods (also known as action methods), such as the `Index` method above, generally return an IActionResult (or a class derived from ActionResult), not a type like string.
+
 # Controllers 
 
 ## Creating Controllers 
-Create a new controller by right clicking the controllers folder and clicking: [add] [empty]
+Create a new controller by right clicking the controllers folder and clicking:` [add] [empty] `
 
 ## Controller Parameters 
 ```
@@ -17,7 +30,16 @@ The preceding code:
 
 - Uses the C# optional-parameter feature to indicate that the numTimes parameter defaults to 1 if no value is passed for that parameter.
 - Uses HtmlEncoder.Default.Encode to protect the app from malicious input (namely JavaScript).
-= Uses Interpolated Strings in $"Hello {name}, NumTimes is: {numTimes}".
+- Uses Interpolated Strings in $"Hello {name}, NumTimes is: {numTimes}".
+
+```
+
+public string Welcome(string name, int ID = 1)
+{
+    return HtmlEncoder.Default.Encode($"Hello {name}, ID: {ID}");
+}
+```
+This time the third URL segment matched the route parameter id. The Welcome method contains a parameter id that matched the URL template in the `MapRoute` method. The trailing `?` (in `id?`) indicates the id parameter is optional.
 
 # Routing 
 Routing is done in the Startup.cs file, this file is where most configurations are 
