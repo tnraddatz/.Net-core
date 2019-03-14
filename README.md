@@ -14,6 +14,19 @@ Views use Razor view files, which have embedded c# code within them. *You create
   - Keep the Name box value, Index.cshtml.
   - Select Add
 
+## Embedding C# Code in View
+To embed code to the view use the `@` symbol and `{}` to encapsulate C# Code 
+```
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>Hello from our View Template!</p>
+```
+## Layout File [Renders your view in its body]
+
 ## Rendering from controllers 
 ```
 public IActionResult Index()
