@@ -18,14 +18,26 @@ Views use Razor view files, which have embedded c# code within them. *You create
 To embed code to the view use the `@` symbol and `{}` to encapsulate C# Code 
 ```
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Welcome";
 }
 
-<h2>Index</h2>
+<h2>Welcome</h2>
 
-<p>Hello from our View Template!</p>
+<ul>
+    @for (int i = 0; i < (int)ViewData["NumTimes"]; i++)
+    {
+        <li>@ViewData["Message"]</li> 
+    }
+</ul>
 ```
-## Layout File [Renders your view in its body]
+## \_Layout File [Renders your view in its body]
+*The Views/_ViewStart.cshtml file brings in the Views/Shared/_Layout.cshtml file to each view. The Layout property can be used to set a different layout view, or set it to null so no layout file will be used.*
+all partial or shared views will begin with `_`, meaning that they can be rendered from another view
+add `<title>@ViewData["Title"] - Movie App</title>` to the `<head>` element under the `<meta name="viewport"...>` line
+
+## Routing to Controllers from a view (Buttons, links, etc ...) 
+`<a asp-area="" asp-controller="Movie" asp-action="Index" class="navbar-brand">Movie App</a>`
+the asp-area can be left blank if your app does not use areas, `asp-controller` is the designated controller, `asp-action` is the action within the controller
 
 ## Rendering from controllers 
 ```
@@ -55,13 +67,37 @@ The preceding code:
 - Uses Interpolated Strings in $"Hello {name}, NumTimes is: {numTimes}".
 
 ```
-
 public string Welcome(string name, int ID = 1)
 {
     return HtmlEncoder.Default.Encode($"Hello {name}, ID: {ID}");
 }
 ```
 This time the third URL segment matched the route parameter id. The Welcome method contains a parameter id that matched the URL template in the `MapRoute` method. The trailing `?` (in `id?`) indicates the id parameter is optional.
+
+## Passing Data from the controller to the view 
+
+The two actions below are the `Index()` action and `Welcome` action, both of these will have corresponding views i.e. `index.cshtml` and `Welcome.cshtml`.
+
+```
+namespace MvcMovie.Controllers
+{
+    public class HelloWorldController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Welcome(string name, int numTimes = 1)
+        {
+            ViewData["Message"] = "Hello " + name;
+            ViewData["NumTimes"] = numTimes;
+
+            return View();
+        }
+    }
+}
+```
 
 # Routing 
 Routing is done in the Startup.cs file, this file is where most configurations are 
@@ -76,3 +112,7 @@ app.UseMvc(routes =>
 });
 ```
 The first URL segment determines the controller class to run. So `localhost:xxxx/HelloWorld` maps to the HelloWorldController class. The second part of the URL segment determines the action method on the class. So `localhost:xxxx/HelloWorld/Index` would cause the Index method of the HelloWorldController class to run. Notice that you only had to browse to `localhost:xxxx/HelloWorld` and the Index method was called by default. This is because Index is the default method that will be called on a controller if a method name isn't explicitly specified. The third part of the URL segment (id) is for route data
+
+## Routing to Controllers from a view (Buttons, links, etc ...) 
+`<a asp-area="" asp-controller="Movie" asp-action="Index" class="navbar-brand">Movie App</a>`
+the asp-area can be left blank, `asp-controller` is the designated controller, `asp-action` is the action within the controller
