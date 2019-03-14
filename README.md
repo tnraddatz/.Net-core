@@ -11,7 +11,7 @@ Create a new controller by right clicking the controllers folder and clicking: [
 Routing is done in the Startup.cs file, this file is where most configurations are 
 
 The default routing format is 
-*** c#
+*** 
 app.UseMvc(routes =>
 {
     routes.MapRoute(
