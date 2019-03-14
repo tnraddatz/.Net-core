@@ -1,6 +1,62 @@
 # .Net-core
 Learning Guide for .Net Core MVC
 
+# Models 
+
+## Adding a new data model class 
+`Right-click the Models folder > Add > Class. Name the class MyModel.`
+
+```
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace MvcMovie.Models
+{
+    public class Movie
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime ReleaseDate { get; set; }
+        public string Genre { get; set; }
+        public decimal Price { get; set; }
+    }
+}
+```
+The Movie class contains:
+- The Id field which is required by the database for the primary key.
+
+- `[DataType(DataType.Date)]:` The DataType attribute specifies the type of the data (Date). With this attribute:
+
+  - The user is not required to enter time information in the date field.
+  - Only the date is displayed, not time information.
+  
+*In this section, the movie model is scaffolded. That is, the scaffolding tool produces pages for Create, Read, Update, and Delete (CRUD) operations for the movie model.*
+
+## Scaffolding model
+*In this section, the movie model is scaffolded. That is, the scaffolding tool produces pages for Create, Read, Update, and Delete (CRUD) operations for the movie model.*
+
+- In Solution Explorer, right-click the Controllers folder > Add > New Scaffolded Item.
+- In the Add Scaffold dialog, select MVC Controller with views, using Entity Framework > Add.
+- Complete the Add Controller dialog:
+  - Model class: Movie (MvcMovie.Models)
+  - Data context class: Select the + icon and add the default MvcMovie.Models.MvcMovieContext
+  - Views: Keep the default of each option checked
+  - Controller name: Keep the default MoviesController
+  - Select Add
+
+Visual Studio creates:
+
+- An Entity Framework Core database context class (Data/MvcMovieContext.cs)
+- A movies controller (Controllers/MoviesController.cs)
+- Razor view files for Create, Delete, Details, Edit, and Index pages (Views/Movies/*.cshtml)*
+
+The automatic creation of the database context and `CRUD` `(create, read, update, and delete)` action methods and views is known as scaffolding.
+
+## Migrations 
+
+
 
 # Views 
 Views use Razor view files, which have embedded c# code within them. *You create a view template file using Razor. Razor-based view templates have a .cshtml file extension. They provide an elegant way to create HTML output with C#.*
