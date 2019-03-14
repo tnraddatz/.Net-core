@@ -1,13 +1,25 @@
 # .Net-core
 Learning Guide for .Net Core MVC
 
-#Controllers 
+# Controllers 
 
-##Creating Controllers 
+## Creating Controllers 
 Create a new controller by right clicking the controllers folder and clicking: [add] [empty]
 
+## Controller Parameters 
+```
+public string Welcome(string name, int numTimes = 1)
+{
+    return HtmlEncoder.Default.Encode($"Hello {name}, NumTimes is: {numTimes}");
+}
+```
+The preceding code:
 
-##Routing 
+- Uses the C# optional-parameter feature to indicate that the numTimes parameter defaults to 1 if no value is passed for that parameter.
+- Uses HtmlEncoder.Default.Encode to protect the app from malicious input (namely JavaScript).
+= Uses Interpolated Strings in $"Hello {name}, NumTimes is: {numTimes}".
+
+# Routing 
 Routing is done in the Startup.cs file, this file is where most configurations are 
 
 The default routing format is 
